@@ -29,6 +29,8 @@ public class CuriosIntegration {
 
     private static Class<?> iCurioClass;
     private static Class<?> slotContextClass;
+    private static Class<?> dropRuleClass;  
+    private static Object defaultDropRule;
     private static Method entityMethod;
     private static Method canEquipMethod;
     private static Method getStackMethod;
@@ -55,6 +57,9 @@ public class CuriosIntegration {
             curioTickMethod = iCurioClass.getMethod("curioTick", slotContextClass);
             onEquipMethod = iCurioClass.getMethod("onEquip", slotContextClass, ItemStack.class);
             onUnequipMethod = iCurioClass.getMethod("onUnequip", slotContextClass, ItemStack.class);
+            
+            dropRuleClass = Class.forName("top.theillusivec4.curios.api.type.capability.ICurio$DropRule");  
+            defaultDropRule = Enum.valueOf((Class<Enum>) dropRuleClass, "DEFAULT");
 
         } catch (Exception e) {
             curiosLoaded = false;
@@ -220,8 +225,10 @@ public class CuriosIntegration {
                     case "getMaxStackSize":
                         return 0;
 
-                    case "getDropRule":
-                    case "getRenderTag":
+                    case "getDropRule":  
+                        return defaultDropRule;  
+  
+                    case "getRenderTag":  
                         return null;
                 }
 
